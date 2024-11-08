@@ -1,0 +1,36 @@
+<form id="contact-form">
+    <label>Imię: <input type="text" name="name" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br>
+    <label>Wiadomość: <textarea name="message" required></textarea></label><br>
+    <button type="submit">Wyślij</button>
+  </form>
+  
+  <script>
+  document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message')
+    };
+  
+    try {
+      const response = await fetch('/.netlify/functions/sendEmail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        alert('Wiadomość wysłana pomyślnie!');
+      } else {
+        alert('Wystąpił problem z wysyłką wiadomości.');
+      }
+    } catch (error) {
+      alert('Błąd połączenia.');
+    }
+  });
+  </script>
+  
